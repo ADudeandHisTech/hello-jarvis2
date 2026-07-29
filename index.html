@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071018" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="JARVIS MCC" />
+  <meta name="description" content="JARVIS Mobile Command Center V1 — local-first Mission Control capture and review console." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="icon" href="icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>JARVIS Mobile Command Center V1</title>
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <button class="icon-button" id="homeButton" aria-label="Home">⌂</button>
+      <div class="brand-block">
+        <div class="eyebrow">MISSION CONTROL</div>
+        <h1>JARVIS</h1>
+        <div class="subtitle">Mobile Command Center V1</div>
+      </div>
+      <button class="icon-button" id="settingsButton" aria-label="Settings">⚙</button>
+    </header>
+
+    <div class="system-strip">
+      <span class="status-dot"></span>
+      <span>LOCAL • MANUAL • NO EXTERNAL ACTIONS</span>
+    </div>
+
+    <main>
+      <section id="view-home" class="view active" data-view="home">
+        <div class="operator-panel">
+          <div>
+            <div class="eyebrow">OPERATOR</div>
+            <h2>Good <span id="daypart">day</span>, Jake.</h2>
+            <p>Capture, route, review, and export Mission Control records from your phone.</p>
+          </div>
+          <div class="jarvis-orb" aria-hidden="true"><span>J</span></div>
+        </div>
+
+        <div class="stat-grid" aria-label="Command center status">
+          <article class="stat-card"><span id="statOpen">0</span><small>Open</small></article>
+          <article class="stat-card"><span id="statReview">0</span><small>Review</small></article>
+          <article class="stat-card"><span id="statHigh">0</span><small>High</small></article>
+          <article class="stat-card"><span id="statDone">0</span><small>Done today</small></article>
+        </div>
+
+        <h3 class="section-title">Command Modules</h3>
+        <div class="command-grid">
+          <button class="command-card cyan" data-open-view="capture">
+            <span class="command-icon">＋</span><strong>Capture</strong><small>Text, photo, video, voice summary</small>
+          </button>
+          <button class="command-card green" data-open-view="ranch">
+            <span class="command-icon">♜</span><strong>Ranch</strong><small>Animals, fence, water, feed, equipment</small>
+          </button>
+          <button class="command-card gold" data-open-view="drone">
+            <span class="command-icon">✦</span><strong>Drone Business</strong><small>Leads, jobs, site notes, next actions</small>
+          </button>
+          <button class="command-card purple" data-open-view="admin">
+            <span class="command-icon">▤</span><strong>Admin</strong><small>Receipts, warranty, calls, appointments</small>
+          </button>
+          <button class="command-card orange" data-open-view="review">
+            <span class="command-icon">✓</span><strong>Review Queue</strong><small>Approve, return, complete, export</small>
+          </button>
+          <button class="command-card blue" data-open-view="ask">
+            <span class="command-icon">◎</span><strong>Ask JARVIS</strong><small>Classify and route a new command</small>
+          </button>
+        </div>
+
+        <button class="urgent-button" id="urgentButton">⚠ Create High-Priority Record</button>
+
+        <div class="recent-block">
+          <div class="section-heading-row">
+            <h3 class="section-title">Recent Activity</h3>
+            <button class="text-button" data-open-view="review">View all</button>
+          </div>
+          <div id="recentList" class="record-list empty-state">No records yet.</div>
+        </div>
+      </section>
+
+      <section id="view-capture" class="view" data-view="capture">
+        <div class="view-header"><button class="back-button">‹</button><div><div class="eyebrow">UNIVERSAL INBOX</div><h2>Capture</h2></div></div>
+        <form id="captureForm" class="form-card">
+          <label>Capture type<select name="captureType" required><option>Text note</option><option>Photo record</option><option>Video record</option><option>Voice summary</option><option>Idea</option><option>Problem</option></select></label>
+          <label>Title<input name="title" required maxlength="100" placeholder="What are you recording?" /></label>
+          <label>Details<textarea name="details" rows="5" placeholder="Use iPhone dictation for hands-free entry."></textarea></label>
+          <div class="form-row"><label>Priority<select name="priority"><option>Medium</option><option>High</option><option>Low</option></select></label><label>Due date<input type="date" name="dueDate" /></label></div>
+          <label>Attachment<input id="captureFile" type="file" name="attachment" accept="image/*,video/*,audio/*,.pdf" /><small class="help-text">Stored locally on this device. Large videos may exceed browser storage.</small></label>
+          <button class="primary-button" type="submit">Save to Universal Inbox</button>
+        </form>
+      </section>
+
+      <section id="view-ranch" class="view" data-view="ranch">
+        <div class="view-header"><button class="back-button">‹</button><div><div class="eyebrow">IRONHIDE ROUTE</div><h2>Ranch Operations</h2></div></div>
+        <form id="ranchForm" class="form-card">
+          <label>Category<select name="category"><option>Animal observation</option><option>Animal injury or illness</option><option>Fence or gate</option><option>Feed or feeder</option><option>Water system</option><option>Equipment</option><option>Predator or trespass</option><option>Work assignment</option><option>Other</option></select></label>
+          <label>Title<input name="title" required maxlength="100" placeholder="Example: Axis buck limping" /></label>
+          <div class="form-row"><label>Location<input name="location" placeholder="North feeder" /></label><label>Severity<select name="severity"><option>Moderate</option><option>Urgent</option><option>Routine</option></select></label></div>
+          <label>Observation or problem<textarea name="details" rows="5" required></textarea></label>
+          <label>Recommended next action<input name="nextAction" placeholder="Recheck tomorrow morning" /></label>
+          <label>Photo or video<input type="file" name="attachment" accept="image/*,video/*" capture="environment" /></label>
+          <button class="primary-button" type="submit">Create Ranch Record</button>
+        </form>
+      </section>
+
+      <section id="view-drone" class="view" data-view="drone">
+        <div class="view-header"><button class="back-button">‹</button><div><div class="eyebrow">OPTIMUS ROUTE</div><h2>Drone Business</h2></div></div>
+        <form id="droneForm" class="form-card">
+          <label>Record type<select name="recordType"><option>New lead</option><option>Active job</option><option>Site survey</option><option>Flight planning note</option><option>Client follow-up</option><option>Delivery record</option><option>Expense or mileage</option></select></label>
+          <label>Client or project<input name="title" required maxlength="100" placeholder="Client name or project" /></label>
+          <div class="form-row"><label>Service<select name="service"><option>Mapping / orthomosaic</option><option>3D model</option><option>Construction progress</option><option>Real estate</option><option>Inspection</option><option>Ranch / wildlife</option><option>Photo / video</option><option>Other</option></select></label><label>Location<input name="location" placeholder="City or site" /></label></div>
+          <label>Details<textarea name="details" rows="5" placeholder="Requirements, contact details, site constraints, or notes."></textarea></label>
+          <div class="form-row"><label>Status<select name="jobStatus"><option>New</option><option>Contacted</option><option>Quoted</option><option>Scheduled</option><option>In progress</option><option>Waiting</option><option>Delivered</option></select></label><label>Target date<input type="date" name="dueDate" /></label></div>
+          <label>Next action<input name="nextAction" placeholder="Call client, prepare quote, schedule site visit..." /></label>
+          <label>Attachment<input type="file" name="attachment" accept="image/*,video/*,.pdf" /></label>
+          <button class="primary-button" type="submit">Create Business Record</button>
+        </form>
+      </section>
+
+      <section id="view-admin" class="view" data-view="admin">
+        <div class="view-header"><button class="back-button">‹</button><div><div class="eyebrow">C-3PO ROUTE</div><h2>Admin</h2></div></div>
+        <form id="adminForm" class="form-card">
+          <label>Category<select name="category"><option>Purchase / receipt</option><option>Warranty / service</option><option>Call or follow-up</option><option>Appointment</option><option>Bill or deadline</option><option>Vehicle maintenance</option><option>Household repair</option><option>Document record</option><option>Other</option></select></label>
+          <label>Title<input name="title" required maxlength="100" placeholder="Example: Maytag washer service" /></label>
+          <div class="form-row"><label>Company or person<input name="contact" placeholder="Maytag" /></label><label>Due date<input type="date" name="dueDate" /></label></div>
+          <label>Details<textarea name="details" rows="5" required placeholder="Model, serial number, problem, claim number, or required action."></textarea></label>
+          <label>Next action<input name="nextAction" placeholder="Schedule service call" /></label>
+          <label>Receipt, label, or document<input type="file" name="attachment" accept="image/*,.pdf" capture="environment" /></label>
+          <button class="primary-button" type="submit">Create Admin Record</button>
+        </form>
+      </section>
+
+      <section id="view-review" class="view" data-view="review">
+        <div class="view-header"><button class="back-button">‹</button><div><div class="eyebrow">OPERATOR CONTROL</div><h2>Review Queue</h2></div></div>
+        <div class="toolbar">
+          <select id="filterStatus" aria-label="Filter by status"><option value="ACTIVE">Active</option><option value="ALL">All records</option><option value="PENDING_REVIEW">Pending review</option><option value="APPROVED">Approved</option><option value="COMPLETED">Completed</option><option value="ARCHIVED">Archived</option></select>
+          <select id="filterModule" aria-label="Filter by module"><option value="ALL">All modules</option><option value="Capture">Capture</option><option value="Ranch">Ranch</option><option value="Drone Business">Drone Business</option><option value="Admin">Admin</option><option value="Ask JARVIS">Ask JARVIS</option></select>
+          <input id="searchRecords" type="search" placeholder="Search" aria-label="Search records" />
+        </div>
+        <div class="action-row">
+          <button class="secondary-button" id="exportJson">Export JSON</button>
+          <button class="secondary-button" id="exportMarkdown">Export Report</button>
+          <button class="secondary-button" id="shareReport">Share Summary</button>
+        </div>
+        <div id="reviewList" class="record-list empty-state">No records match this filter.</div>
+      </section>
+
+      <section id="view-ask" class="view" data-view="ask">
+        <div class="view-header"><button class="back-button">‹</button><div><div class="eyebrow">COMMAND ROUTER</div><h2>Ask JARVIS</h2></div></div>
+        <form id="askForm" class="form-card">
+          <label>Your command<textarea id="jarvisCommand" name="command" rows="7" required placeholder="Example: Create a high-priority task to photograph the Maytag model plate and schedule a service call."></textarea></label>
+          <div class="route-preview">
+            <div class="eyebrow">ROUTING PREVIEW</div>
+            <div class="route-grid"><span>Command owner</span><strong>JARVIS</strong><span>Assigned identity</span><strong id="routeIdentity">JARVIS</strong><span>Permission tier</span><strong id="routePermission">TIER-1 REVIEW</strong><span>Approval</span><strong>PENDING OPERATOR</strong></div>
+            <p id="routeReason">Enter a command to preview classification.</p>
+          </div>
+          <div class="form-row"><label>Priority<select name="priority"><option>Medium</option><option>High</option><option>Low</option></select></label><label>Due date<input type="date" name="dueDate" /></label></div>
+          <button class="primary-button" type="submit">Create Routed Task</button>
+        </form>
+      </section>
+
+      <section id="view-settings" class="view" data-view="settings">
+        <div class="view-header"><button class="back-button">‹</button><div><div class="eyebrow">SYSTEM</div><h2>Settings & Data</h2></div></div>
+        <div class="form-card">
+          <h3>Installation</h3>
+          <p class="muted">On iPhone Safari: tap Share, then <strong>Add to Home Screen</strong>. The app works offline after its first successful load.</p>
+          <button class="secondary-button full" id="installButton">Show Install Instructions</button>
+          <h3>Data</h3>
+          <p class="muted">Records and attachments remain in this browser on this device unless you export them.</p>
+          <label class="file-button">Import JARVIS JSON<input id="importJson" type="file" accept="application/json,.json" /></label>
+          <button class="secondary-button full" id="exportBackup">Export Full Record Backup</button>
+          <h3>Safety State</h3>
+          <ul class="safety-list"><li>No email or cloud account connection</li><li>No autonomous execution</li><li>No background monitoring</li><li>No file deletion; records are archived</li><li>Ask JARVIS tasks require operator approval</li></ul>
+          <div class="build-stamp">JARVIS MOBILE COMMAND CENTER V1<br />Build: 2026-07-28 • Schema: 1.0</div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <button data-open-view="home" class="active"><span>⌂</span><small>Home</small></button>
+      <button data-open-view="capture"><span>＋</span><small>Capture</small></button>
+      <button data-open-view="ask"><span>◎</span><small>JARVIS</small></button>
+      <button data-open-view="review"><span>✓</span><small>Review</small></button>
+    </nav>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="installDialog">
+      <h3>Install on iPhone</h3>
+      <ol><li>Open the hosted app in Safari.</li><li>Tap the Share button.</li><li>Scroll down and tap <strong>Add to Home Screen</strong>.</li><li>Confirm the name “JARVIS MCC” and tap Add.</li></ol>
+      <button class="primary-button" id="closeInstall">Done</button>
+    </dialog>
+  </div>
+  <script src="app.js" defer></script>
+</body>
+</html>
